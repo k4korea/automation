@@ -1,0 +1,3393 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 2,
+  "id": 23,
+  "iteration": 1668574190858,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 60,
+      "options": {
+        "content": "<font size=\"3\", color=\"aquamarine\">데이터 출력 에러 시 NodeGroup # 02 대시보드를 사용하세요.</font>",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.4.2",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 2
+      },
+      "id": 10,
+      "panels": [],
+      "title": "노드그룹 요약",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${Datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 3
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "exemplar": true,
+          "expr": "count(kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\"}) by(label_eks_amazonaws_com_nodegroup)",
+          "interval": "",
+          "legendFormat": "{{label_eks_amazonaws_com_nodegroup}}",
+          "refId": "A"
+        }
+      ],
+      "title": "그룹별 노드수",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${Datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 7,
+        "x": 8,
+        "y": 3
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "exemplar": true,
+          "expr": "avg(\r\nlabel_replace( instance:node_cpu:ratio, \"node_ip\", \"$1\", \"instance\", \"(.*):.*\" ) \r\n* on (node_ip) group_left (label_eks_amazonaws_com_nodegroup) \r\nlabel_replace(kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap(.*)\")\r\n) by (label_eks_amazonaws_com_nodegroup)",
+          "interval": "",
+          "legendFormat": "{{label_eks_amazonaws_com_nodegroup}}",
+          "refId": "A"
+        }
+      ],
+      "title": "그룹별 CPU 사용률 (평균)",
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 8,
+        "w": 2,
+        "x": 15,
+        "y": 3
+      },
+      "id": 27,
+      "options": {
+        "content": "</br></br></br>\n\n<font size=\"3\"> ← 현재 사용량 </font>\n</br></br></br></br>\n\n<font size=\"3\"> <div style=\"text-align: right\"> 예약 현황 →  </div> </font>\n\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.4.2",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${Datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 7,
+        "x": 17,
+        "y": 3
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "exemplar": true,
+          "expr": "avg(\r\n  sum(kube_pod_container_resource_requests{resource=\"cpu\"}) by (node)\r\n  / on (node) \r\n  kube_node_status_allocatable{resource=\"cpu\"} \r\n  * on (node) group_left(label_eks_amazonaws_com_nodegroup)\r\n  kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\"}\r\n) by (label_eks_amazonaws_com_nodegroup)",
+          "interval": "",
+          "legendFormat": "{{label_eks_amazonaws_com_nodegroup}}",
+          "refId": "A"
+        }
+      ],
+      "title": "그룹별 CPU 예약 (평균)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${Datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 7,
+        "x": 8,
+        "y": 7
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "exemplar": true,
+          "expr": "avg(\r\n    label_replace( instance:node_memory_utilisation:ratio, \"node_ip\", \"$1\", \"instance\", \"(.*):.*\" ) \r\n    * on (node_ip) group_left (label_eks_amazonaws_com_nodegroup) \r\n    label_replace(kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap(.*)\")\r\n) by (label_eks_amazonaws_com_nodegroup)",
+          "interval": "",
+          "legendFormat": "{{label_eks_amazonaws_com_nodegroup}}",
+          "refId": "A"
+        }
+      ],
+      "title": "그룹별 MEMORY 사용률 (평균)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${Datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 7,
+        "x": 17,
+        "y": 7
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "exemplar": true,
+          "expr": "avg(\r\n  sum(kube_pod_container_resource_requests{resource=\"memory\"}) by (node)\r\n  / on (node) \r\n  kube_node_status_allocatable{resource=\"memory\"} \r\n  * on (node) group_left(label_eks_amazonaws_com_nodegroup)\r\n  kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\"}\r\n) by (label_eks_amazonaws_com_nodegroup)",
+          "interval": "",
+          "legendFormat": "{{label_eks_amazonaws_com_nodegroup}}",
+          "refId": "A"
+        }
+      ],
+      "title": "그룹별 Memory 예약 (평균)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${Datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 11
+      },
+      "id": 56,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.4.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "exemplar": true,
+          "expr": "count(kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\"}) by(label_eks_amazonaws_com_nodegroup)",
+          "interval": "",
+          "legendFormat": "{{label_eks_amazonaws_com_nodegroup}}",
+          "refId": "A"
+        }
+      ],
+      "title": "그룹별 노드수",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${Datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 1,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 2,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 8,
+        "y": 11
+      },
+      "id": 55,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "label_replace(\r\n    instance:node_cpu_utilisation:rate5m, \"node_select\", \"$1-$2-$3-$4\", \"instance\", \"([0-9]*).([0-9]*).([0-9]*).([0-9]*):.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+          "interval": "",
+          "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "노드별 CPU 사용률 (%)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 12,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 2,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 11,
+            "x": 0,
+            "y": 20
+          },
+          "id": 14,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    instance:node_cpu:ratio, \"node_select\", \"$1-$2-$3-$4\", \"instance\", \"([0-9]*).([0-9]*).([0-9]*).([0-9]*):.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 CPU 사용률 (%)",
+          "type": "timeseries"
+        },
+        {
+          "gridPos": {
+            "h": 16,
+            "w": 2,
+            "x": 11,
+            "y": 20
+          },
+          "id": 26,
+          "options": {
+            "content": "</br></br>\n<font size=\"10\", color=\"green\">CPU</font>\n</br></br>\n</br></br>\n\n<font size=\"3\"> ← 현재 사용량 </font>\n</br></br></br></br>\n\n<font size=\"3\"> <div style=\"text-align: right\"> 예약 현황 →  </div> </font>\n\n</br></br></br></br>\n\n<font size=\"1\", color=\"red\"> 오른쪽 예약 현황 대비 왼쪽 현재 사용량이 현저하게 작은 경우,\n각 pod의 resource request 튜닝 필요 </font>\n",
+            "mode": "markdown"
+          },
+          "pluginVersion": "8.4.2",
+          "transparent": true,
+          "type": "text"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 11,
+            "x": 13,
+            "y": 20
+          },
+          "id": 23,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "(\r\n    sum(kube_pod_container_resource_requests{resource=\"cpu\"}) by (node)\r\n    / on (node)\r\n    kube_node_status_allocatable{resource=\"cpu\"} \r\n) * on (node) group_left(label_eks_amazonaws_com_nodegroup, node_select)\r\nlabel_replace( \r\n    kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\", node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 CPU 예약 (%)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 2,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 11,
+            "x": 0,
+            "y": 28
+          },
+          "id": 32,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{container!=\"\"}) by(node), \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 CPU 사용량 (core)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 11,
+            "x": 13,
+            "y": 28
+          },
+          "id": 33,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "(\r\n    sum(kube_pod_container_resource_requests{resource=\"cpu\"}) by (node)\r\n) * on (node) group_left(label_eks_amazonaws_com_nodegroup, node_select)\r\nlabel_replace( \r\n    kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\", node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 CPU 예약 (core)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 36
+          },
+          "id": 28,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "sum(rate(container_cpu_cfs_throttled_seconds_total{container!=\"\"}[1m]))by(node)\r\n * on (node) group_left(label_eks_amazonaws_com_nodegroup, node_select)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 CPU throttle",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 11,
+            "x": 0,
+            "y": 43
+          },
+          "id": 15,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    instance:node_memory_utilisation:ratio, \"node_select\", \"$1-$2-$3-$4\", \"instance\", \"([0-9]*).([0-9]*).([0-9]*).([0-9]*):.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 Memory 사용률 (%)",
+          "type": "timeseries"
+        },
+        {
+          "gridPos": {
+            "h": 16,
+            "w": 2,
+            "x": 11,
+            "y": 43
+          },
+          "id": 34,
+          "options": {
+            "content": "</br></br>\n<font size=\"6\", color=\"green\">Memory</font>\n</br></br>\n</br></br>\n\n<font size=\"3\"> ← 현재 사용량 </font>\n</br></br></br></br>\n\n<font size=\"3\"> <div style=\"text-align: right\"> 예약 현황 →  </div> </font>\n\n</br></br></br></br>\n\n<font size=\"1\", color=\"red\"> 오른쪽 예약 현황 대비 왼쪽 현재 사용량이 현저하게 작은 경우,\n각 pod의 resource request 튜닝 필요 </font>\n",
+            "mode": "markdown"
+          },
+          "pluginVersion": "8.4.2",
+          "transparent": true,
+          "type": "text"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 11,
+            "x": 13,
+            "y": 43
+          },
+          "id": 24,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "(\r\n    sum(kube_pod_container_resource_requests{resource=\"memory\"}) by (node)\r\n    / on (node)\r\n    kube_node_status_allocatable{resource=\"memory\"} \r\n) * on (node) group_left(label_eks_amazonaws_com_nodegroup, node_select)\r\nlabel_replace( \r\n    kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\", node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 Memory 예약 (%)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 11,
+            "x": 0,
+            "y": 51
+          },
+          "id": 35,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    sum(container_memory_working_set_bytes{container!=\"\", pod!=\"\"}) by(node), \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 Memory 사용량 (bytes)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 11,
+            "x": 13,
+            "y": 51
+          },
+          "id": 36,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "(\r\n    sum(kube_pod_container_resource_requests{resource=\"memory\"}) by (node)\r\n) * on (node) group_left(label_eks_amazonaws_com_nodegroup, node_select)\r\nlabel_replace( \r\n    kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\", node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 Memory 예약 (bytes)",
+          "type": "timeseries"
+        }
+      ],
+      "title": "CPU, Memory / 노드그룹($nodegroup) / 노드($node)",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 43,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "binBps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 11
+          },
+          "id": 29,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    sum(rate(node_network_receive_bytes_total{device=~\"eth.*\"}[1m]))by(instance), \"node_select\", \"$1-$2-$3-$4\", \"instance\", \"([0-9]*).([0-9]*).([0-9]*).([0-9]*):.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 Network (eth receive)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "binBps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 11
+          },
+          "id": 41,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    sum(rate(node_network_receive_drop_total{}[1m])) by(instance), \"node_select\", \"$1-$2-$3-$4\", \"instance\", \"([0-9]*).([0-9]*).([0-9]*).([0-9]*):.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 Network drop",
+          "type": "timeseries"
+        }
+      ],
+      "title": "Network / 노드그룹($nodegroup) / 노드($node)",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 45,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 12
+          },
+          "id": 39,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    (node_filesystem_size_bytes{fstype !=\"tmpfs\", mountpoint !=\"boot\"} - node_filesystem_avail_bytes{fstype !=\"tmpfs\", mountpoint !=\"boot\"}), \"node_select\", \"$1-$2-$3-$4\", \"instance\", \"([0-9]*).([0-9]*).([0-9]*).([0-9]*):.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 Disk 사용량 (GB)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 1,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 12
+          },
+          "id": 30,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    1 - (node_filesystem_avail_bytes{fstype !=\"tmpfs\", mountpoint !=\"boot\"} / node_filesystem_size_bytes{fstype !=\"tmpfs\", mountpoint !=\"boot\"}), \"node_select\", \"$1-$2-$3-$4\", \"instance\", \"([0-9]*).([0-9]*).([0-9]*).([0-9]*):.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 Disk 사용률 (%)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 20
+          },
+          "id": 37,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    sum(rate(node_disk_io_time_seconds_total[1m])) by (instance), \"node_select\", \"$1-$2-$3-$4\", \"instance\", \"([0-9]*).([0-9]*).([0-9]*).([0-9]*):.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 Disk io time",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 20
+          },
+          "id": 38,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    sum( rate(node_disk_io_time_weighted_seconds_total [1m])) by(instance), \"node_select\", \"$1-$2-$3-$4\", \"instance\", \"([0-9]*).([0-9]*).([0-9]*).([0-9]*):.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 Disk io time weighted",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 28
+          },
+          "id": 40,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    kube_node_status_capacity{ resource=\"ephemeral_storage\" }, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 임시 볼륨",
+          "type": "timeseries"
+        }
+      ],
+      "title": "Disk / 노드그룹($nodegroup) / 노드($node)",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 52,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 13
+          },
+          "id": 53,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "exemplar": true,
+              "expr": "label_replace(\r\n    volume_manager_total_volumes{state=\"actual_state_of_world\", plugin_name=\"kubernetes.io/aws-ebs\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)\r\n\r\n",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 aws-ebs 사용 개수",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 1,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "always",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 13
+          },
+          "id": 48,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes\r\n* on (persistentvolumeclaim) group_left(pod) kube_pod_spec_volumes_persistentvolumeclaims_info{}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}} // PVC : {{persistentvolumeclaim}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 PV 사용률",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMin": 0,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 21
+          },
+          "id": 50,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "exemplar": true,
+              "expr": "label_replace(\r\n    volume_manager_total_volumes{state=\"actual_state_of_world\", plugin_name=\"kubernetes.io/host-path\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)\r\n\r\n",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 host path 사용 개수",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMin": 0,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 21
+          },
+          "id": 54,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "exemplar": true,
+              "expr": "label_replace(\r\n    volume_manager_total_volumes{state=\"actual_state_of_world\", plugin_name=\"kubernetes.io/empty-dir\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n) * on (node_select) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_select\", \"$1\", \"node\", \"ip-(.*).ap.*\"\r\n)\r\n\r\n",
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{node_select}}",
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 empty dir 사용 개수",
+          "type": "timeseries"
+        }
+      ],
+      "title": "Volume / 노드그룹($nodegroup) / 노드($node)",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "id": 47,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMax": 20,
+                "axisSoftMin": 0,
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 11,
+            "x": 0,
+            "y": 14
+          },
+          "id": 18,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.4.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "label_replace(\r\n    count(kube_pod_info)by(host_ip), \"node_ip\", \"$1\", \"host_ip\", \"(.*)\"\r\n) * on (node_ip) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "time_series",
+              "instant": false,
+              "interval": "",
+              "legendFormat": "{{label_eks_amazonaws_com_nodegroup}} : {{host_ip}}",
+              "range": false,
+              "refId": "A"
+            }
+          ],
+          "title": "노드별 파드 개수",
+          "transformations": [],
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "left",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "decimals": 1,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #B"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "s"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #C"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "bits"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #D"
+                },
+                "properties": [
+                  {
+                    "id": "decimals"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #E"
+                },
+                "properties": [
+                  {
+                    "id": "custom.displayMode",
+                    "value": "lcd-gauge"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "min",
+                    "value": 0
+                  },
+                  {
+                    "id": "max",
+                    "value": 1
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green"
+                        },
+                        {
+                          "color": "orange",
+                          "value": 0.7
+                        },
+                        {
+                          "color": "red",
+                          "value": 0.85
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 300
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #F"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "lcd-gauge"
+                  },
+                  {
+                    "id": "min",
+                    "value": 0
+                  },
+                  {
+                    "id": "max",
+                    "value": 1
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 300
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green"
+                        },
+                        {
+                          "color": "orange",
+                          "value": 0.7
+                        },
+                        {
+                          "color": "red",
+                          "value": 0.85
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 11,
+            "w": 24,
+            "x": 0,
+            "y": 22
+          },
+          "id": 17,
+          "options": {
+            "footer": {
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "frameIndex": 0,
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": false,
+                "displayName": "노드 이름"
+              }
+            ]
+          },
+          "pluginVersion": "8.4.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "label_replace(\r\n    node_uname_info - 0, \"node_ip\", \"$1\", \"instance\", \"(.*):(.*)\"\r\n) * on (node_ip) group_left(label_eks_amazonaws_com_nodegroup, label_kubernetes_io_hostname)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "table",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "__auto",
+              "range": false,
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "label_replace(\r\n  sum(time() - node_boot_time_seconds)by(instance), \"node_ip\", \"$1\", \"instance\", \"(.*):(.*)\"\r\n) * on (node_ip)\r\nlabel_replace( \r\n  kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "__auto",
+              "range": false,
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "label_replace(\r\n  node_memory_MemTotal_bytes - 0, \"node_ip\", \"$1\", \"instance\", \"(.*):(.*)\"\r\n) * on (node_ip) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n  kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{label_name}}",
+              "range": false,
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "label_replace(\r\n  count(node_cpu_seconds_total{mode='system'}) by (instance), \"node_ip\", \"$1\", \"instance\", \"(.*):(.*)\"\r\n) * on (node_ip) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "range": false,
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "label_replace(\r\n  1 - avg(rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) by (instance), \"node_ip\", \"$1\", \"instance\", \"(.*):(.*)\"\r\n) * on (node_ip) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "range": false,
+              "refId": "E"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "label_replace(\r\n  1 - (node_memory_MemAvailable_bytes/ (node_memory_MemTotal_bytes)), \"node_ip\", \"$1\", \"instance\", \"(.*):(.*)\"\r\n) * on (node_ip) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "range": false,
+              "refId": "F"
+            }
+          ],
+          "title": "노드 정보 및 현재 리소스 사용 현황",
+          "transformations": [
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "Value #A": true,
+                  "container": true,
+                  "domainname": true,
+                  "endpoint": true,
+                  "instance": true,
+                  "job": true,
+                  "machine": true,
+                  "namespace": true,
+                  "nodename": true,
+                  "pod": true,
+                  "release": true,
+                  "service": true,
+                  "sysname": true,
+                  "version": true
+                },
+                "indexByName": {
+                  "Time": 8,
+                  "Value #A": 22,
+                  "Value #B": 3,
+                  "Value #C": 5,
+                  "Value #D": 4,
+                  "Value #E": 6,
+                  "Value #F": 7,
+                  "container": 9,
+                  "domainname": 10,
+                  "endpoint": 11,
+                  "instance": 12,
+                  "job": 13,
+                  "label_eks_amazonaws_com_nodegroup": 0,
+                  "label_kubernetes_io_hostname": 2,
+                  "machine": 14,
+                  "namespace": 15,
+                  "node_ip": 1,
+                  "nodename": 16,
+                  "pod": 17,
+                  "release": 18,
+                  "service": 19,
+                  "sysname": 20,
+                  "version": 21
+                },
+                "renameByName": {
+                  "Value #B": "가동 시간",
+                  "Value #C": "메모리 용량",
+                  "Value #D": "CPU 코어",
+                  "Value #E": "CPU 사용률",
+                  "Value #F": "메모리 사용률",
+                  "label_eks_amazonaws_com_nodegroup": "노드그룹",
+                  "label_kubernetes_io_hostname": "노드 이름",
+                  "node_ip": "노드 IP"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${Datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "left",
+                "displayMode": "auto",
+                "filterable": false
+              },
+              "decimals": 1,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #B"
+                },
+                "properties": [
+                  {
+                    "id": "decimals"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "none"
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "lcd-gauge"
+                  },
+                  {
+                    "id": "min",
+                    "value": 0
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 300
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #C"
+                },
+                "properties": [
+                  {
+                    "id": "decimals"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "bytes"
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "lcd-gauge"
+                  },
+                  {
+                    "id": "min",
+                    "value": 0
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 300
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #D"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "s"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "파드"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 340
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 11,
+            "w": 24,
+            "x": 0,
+            "y": 33
+          },
+          "id": 31,
+          "options": {
+            "footer": {
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "frameIndex": 0,
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": false,
+                "displayName": "파드"
+              }
+            ]
+          },
+          "pluginVersion": "8.4.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "label_replace(\r\n    kube_pod_info - 0, \"node_ip\", \"$1\", \"host_ip\", \"(.*)\"\r\n) * on (node_ip) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "table",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "__auto",
+              "range": false,
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "exemplar": false,
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"\", pod!=\"\"}[1m]))by(pod)\r\n* on (pod) group_left(node_ip)\r\nlabel_replace(\r\n    kube_pod_info, \"node_ip\", \"$1\", \"host_ip\", \"(.*)\"\r\n) * on (node_ip) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "__auto",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "exemplar": false,
+              "expr": "sum(container_memory_working_set_bytes{container!=\"\", pod!=\"\"})by(pod)\r\n* on (pod) group_left(node_ip)\r\nlabel_replace(\r\n    kube_pod_info, \"node_ip\", \"$1\", \"host_ip\", \"(.*)\"\r\n) * on (node_ip) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "__auto",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "${Datasource}"
+              },
+              "exemplar": false,
+              "expr": "(time() - kube_pod_created)\r\n* on (pod) group_left(node_ip)\r\nlabel_replace(\r\n    kube_pod_info, \"node_ip\", \"$1\", \"host_ip\", \"(.*)\"\r\n) * on (node_ip) group_left(label_eks_amazonaws_com_nodegroup)\r\nlabel_replace( \r\n    kube_node_labels{node=~\"$node\"}, \"node_ip\", \"$1.$2.$3.$4\", \"node\", \"ip-(.*)-(.*)-(.*)-(.*).ap.*\"\r\n)",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "D"
+            }
+          ],
+          "title": "노드별 파드 정보 및 현재 리소스 사용 현황",
+          "transformations": [
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true,
+                  "Value": true,
+                  "Value #A": true,
+                  "container": true,
+                  "created_by_kind": false,
+                  "created_by_name": true,
+                  "endpoint": true,
+                  "host_ip": true,
+                  "host_network": true,
+                  "id": true,
+                  "image": false,
+                  "instance": true,
+                  "job": true,
+                  "metrics_path": true,
+                  "name": true,
+                  "node": true,
+                  "pod_ip": true,
+                  "priority_class": true,
+                  "service": true,
+                  "uid": true
+                },
+                "indexByName": {
+                  "Time": 8,
+                  "Value #A": 21,
+                  "Value #B": 6,
+                  "Value #C": 7,
+                  "Value #D": 3,
+                  "container": 9,
+                  "created_by_kind": 5,
+                  "created_by_name": 11,
+                  "endpoint": 12,
+                  "host_ip": 10,
+                  "host_network": 13,
+                  "instance": 14,
+                  "job": 15,
+                  "label_eks_amazonaws_com_nodegroup": 0,
+                  "namespace": 4,
+                  "node": 16,
+                  "node_ip": 1,
+                  "pod": 2,
+                  "pod_ip": 17,
+                  "priority_class": 18,
+                  "service": 19,
+                  "uid": 20
+                },
+                "renameByName": {
+                  "Value #B": "CPU 사용량",
+                  "Value #C": "메모리 사용량",
+                  "Value #D": "가동 시간",
+                  "created_by_kind": "workload 타입",
+                  "host_ip": "",
+                  "label_eks_amazonaws_com_nodegroup": "노드그룹",
+                  "namespace": "",
+                  "node_ip": "노드",
+                  "pod": "파드"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "title": "Info(pod, spec) / 노드그룹($nodegroup) / 노드($node)",
+      "type": "row"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 35,
+  "style": "dark",
+  "tags": [
+    "Copyrightⓒ. PSA AiOps HS&EV All Rights Reserved",
+    "mzc_tm_aiops@megazone.com"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "Datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${Datasource}"
+        },
+        "definition": "label_values(kube_node_labels, label_eks_amazonaws_com_nodegroup)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "nodegroup",
+        "options": [],
+        "query": {
+          "query": "label_values(kube_node_labels, label_eks_amazonaws_com_nodegroup)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${Datasource}"
+        },
+        "definition": "label_values(kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\"}, node)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "node",
+        "options": [],
+        "query": {
+          "query": "label_values(kube_node_labels{label_eks_amazonaws_com_nodegroup=~\"$nodegroup\"}, node)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${Datasource}"
+        },
+        "filters": [],
+        "hide": 0,
+        "name": "Filters",
+        "skipUrlSync": false,
+        "type": "adhoc"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "PSA Aiops - Su Dashboard - NodeGroup # 01",
+  "uid": "UV9pFlmVk",
+  "version": 37,
+  "weekStart": ""
+}

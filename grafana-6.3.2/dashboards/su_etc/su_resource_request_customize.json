@@ -1,0 +1,564 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 39,
+    "iteration": 1663131253054,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 10,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${Datasource}"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 1
+            },
+            "id": 5,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "max"
+                ],
+                "displayMode": "table",
+                "placement": "right"
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${Datasource}"
+                },
+                "exemplar": true,
+                "expr": "max(\r\n    rate(container_cpu_usage_seconds_total{container!~\"POD|\" }[1m])\r\n    * on (pod, container) group_left(rollout)\r\n    kube_pod_container_info\r\n    * on (pod) group_left(rollout)\r\n    label_replace(\r\n        kube_pod_info{namespace!~\"argo-cd|argo-rollouts|default|kube-node-lease|kube-public|kube-system|monitor|monitoring|nginx-ingress|nginx-test|test\"}, \"rollout\", \"$1\", \"created_by_name\", \"(.*)-([^-]*)\"\r\n    )\r\n)by(container, rollout)",
+                "interval": "",
+                "legendFormat": "{{rollout}} : {{container}}",
+                "refId": "A"
+              }
+            ],
+            "title": "CPU usage // rollout : container",
+            "type": "timeseries"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${Datasource}"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "palette-classic"
+                },
+                "custom": {
+                  "axisLabel": "",
+                  "axisPlacement": "auto",
+                  "barAlignment": 0,
+                  "drawStyle": "line",
+                  "fillOpacity": 0,
+                  "gradientMode": "none",
+                  "hideFrom": {
+                    "legend": false,
+                    "tooltip": false,
+                    "viz": false
+                  },
+                  "lineInterpolation": "linear",
+                  "lineWidth": 1,
+                  "pointSize": 5,
+                  "scaleDistribution": {
+                    "type": "linear"
+                  },
+                  "showPoints": "auto",
+                  "spanNulls": false,
+                  "stacking": {
+                    "group": "A",
+                    "mode": "none"
+                  },
+                  "thresholdsStyle": {
+                    "mode": "off"
+                  }
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "bytes"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 1
+            },
+            "id": 6,
+            "options": {
+              "legend": {
+                "calcs": [
+                  "max"
+                ],
+                "displayMode": "table",
+                "placement": "right"
+              },
+              "tooltip": {
+                "mode": "single",
+                "sort": "none"
+              }
+            },
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${Datasource}"
+                },
+                "exemplar": true,
+                "expr": "max(\r\n    container_memory_working_set_bytes{container!~\"POD|\" }\r\n    * on (pod, container) group_left(rollout)\r\n    kube_pod_container_info\r\n    * on (pod) group_left(rollout)\r\n    label_replace(\r\n        kube_pod_info{namespace!~\"argo-cd|argo-rollouts|default|kube-node-lease|kube-public|kube-system|monitor|monitoring|nginx-ingress|nginx-test|test\"}, \"rollout\", \"$1\", \"created_by_name\", \"(.*)-([^-]*)\"\r\n    )\r\n)by(container, rollout)",
+                "interval": "",
+                "legendFormat": "{{rollout}} : {{container}}",
+                "refId": "A"
+              }
+            ],
+            "title": "Memory usage // rollout : container",
+            "type": "timeseries"
+          }
+        ],
+        "title": "Resource usage graph // rollout : container",
+        "type": "row"
+      },
+      {
+        "collapsed": true,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 1
+        },
+        "id": 8,
+        "panels": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${Datasource}"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "custom": {
+                  "align": "auto",
+                  "displayMode": "auto"
+                },
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    }
+                  ]
+                }
+              },
+              "overrides": [
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value #B"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "bytes"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value #D"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "bytes"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Value #B * 1.5"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "bytes"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "CPU MAX/request (%)"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "percentunit"
+                    },
+                    {
+                      "id": "custom.displayMode",
+                      "value": "color-text"
+                    }
+                  ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Memory MAX/request (%)"
+                  },
+                  "properties": [
+                    {
+                      "id": "unit",
+                      "value": "percentunit"
+                    },
+                    {
+                      "id": "custom.displayMode",
+                      "value": "color-text"
+                    }
+                  ]
+                }
+              ]
+            },
+            "gridPos": {
+              "h": 21,
+              "w": 24,
+              "x": 0,
+              "y": 2
+            },
+            "id": 11,
+            "options": {
+              "footer": {
+                "fields": "",
+                "reducer": [
+                  "sum"
+                ],
+                "show": false
+              },
+              "showHeader": true,
+              "sortBy": [
+                {
+                  "desc": false,
+                  "displayName": "rollout"
+                }
+              ]
+            },
+            "pluginVersion": "8.4.2",
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${Datasource}"
+                },
+                "exemplar": false,
+                "expr": "max_over_time(\r\n    max(\r\n        rate(container_cpu_usage_seconds_total{container!~\"POD|\" }[1m])\r\n        * on (pod, container) group_left(rollout)\r\n        kube_pod_container_info\r\n        * on (pod) group_left(rollout)\r\n        label_replace(\r\n            kube_pod_info{namespace!~\"argo-cd|argo-rollouts|default|kube-node-lease|kube-public|kube-system|monitor|monitoring|nginx-ingress|nginx-test|test\"}, \"rollout\", \"$1\", \"created_by_name\", \"(.*)-([^-]*)\"\r\n        )\r\n    )by(container, rollout)\r\n[30d:1h])",
+                "format": "table",
+                "instant": true,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${Datasource}"
+                },
+                "exemplar": false,
+                "expr": "max_over_time(\r\n    max(\r\n        container_memory_working_set_bytes{container!~\"POD|\"}\r\n        * on (pod, container) group_left(rollout)\r\n        kube_pod_container_info\r\n        * on (pod) group_left(rollout)        \r\n        label_replace(\r\n            kube_pod_info{namespace!~\"argo-cd|argo-rollouts|default|kube-node-lease|kube-public|kube-system|monitor|monitoring|nginx-ingress|nginx-test|test\"}, \"rollout\", \"$1\", \"created_by_name\", \"(.*)-([^-]*)\"\r\n        )\r\n    )by(container, rollout)\r\n[30d:1h])",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "B"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${Datasource}"
+                },
+                "exemplar": false,
+                "expr": "max(\r\n    kube_pod_container_resource_requests{resource=\"cpu\"}\r\n    * on (pod, container) group_left(rollout)\r\n    kube_pod_container_info\r\n    * on (pod) group_left(rollout)\r\n    label_replace(\r\n        kube_pod_info{namespace!~\"argo-cd|argo-rollouts|default|kube-node-lease|kube-public|kube-system|monitor|monitoring|nginx-ingress|nginx-test|test\"}, \"rollout\", \"$1\", \"created_by_name\", \"(.*)-([^-]*)\"\r\n    )\r\n)by(container, rollout)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "C"
+              },
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "${Datasource}"
+                },
+                "exemplar": false,
+                "expr": "max(\r\n    kube_pod_container_resource_requests{resource=\"memory\"}\r\n    * on (pod, container) group_left(rollout)\r\n    kube_pod_container_info\r\n    * on (pod) group_left(rollout)\r\n    label_replace(\r\n        kube_pod_info{namespace!~\"argo-cd|argo-rollouts|default|kube-node-lease|kube-public|kube-system|monitor|monitoring|nginx-ingress|nginx-test|test\"}, \"rollout\", \"$1\", \"created_by_name\", \"(.*)-([^-]*)\"\r\n    )\r\n)by(container, rollout)",
+                "format": "table",
+                "hide": false,
+                "instant": true,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "D"
+              }
+            ],
+            "title": "30일 최대 사용량",
+            "transformations": [
+              {
+                "id": "merge",
+                "options": {}
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "binary": {
+                    "left": "Value #A",
+                    "operator": "*",
+                    "reducer": "sum",
+                    "right": "1.5"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": false
+                }
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "binary": {
+                    "left": "Value #B",
+                    "operator": "*",
+                    "reducer": "sum",
+                    "right": "1.5"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  }
+                }
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "CPU MAX/request (%)",
+                  "binary": {
+                    "left": "Value #A",
+                    "operator": "/",
+                    "reducer": "sum",
+                    "right": "Value #C"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  }
+                }
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "Memory MAX/request (%)",
+                  "binary": {
+                    "left": "Value #B",
+                    "operator": "/",
+                    "reducer": "sum",
+                    "right": "Value #D"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  }
+                }
+              },
+              {
+                "id": "organize",
+                "options": {
+                  "excludeByName": {
+                    "Time": true,
+                    "endpoint": true,
+                    "instance": true,
+                    "job": true,
+                    "namespace": true,
+                    "node": true,
+                    "resource": true,
+                    "service": true,
+                    "uid": true,
+                    "unit": true
+                  },
+                  "indexByName": {
+                    "CPU MAX/request (%)": 5,
+                    "Memory MAX/request (%)": 9,
+                    "Time": 10,
+                    "Value #A": 2,
+                    "Value #A * 1.5": 3,
+                    "Value #B": 6,
+                    "Value #B * 1.5": 7,
+                    "Value #C": 4,
+                    "Value #D": 8,
+                    "container": 1,
+                    "rollout": 0
+                  },
+                  "renameByName": {
+                    "1": "!",
+                    "Value #A": "CPU MAX (30d) (core)",
+                    "Value #A * 1.5": "CPU MAX * 1.5 (core)",
+                    "Value #B": "Memory MAX (30d) (bytes)",
+                    "Value #B * 1.5": "Memory MAX * 1.5 (bytes)",
+                    "Value #C": "CPU request (core) // NOW",
+                    "Value #D": "Memory request (bytes) // NOW"
+                  }
+                }
+              }
+            ],
+            "type": "table"
+          }
+        ],
+        "title": "30Days MAX resource Table",
+        "type": "row"
+      }
+    ],
+    "schemaVersion": 35,
+    "style": "dark",
+    "tags": [
+      "Copyrightⓒ. PSA AiOps HS&EV All Rights Reserved",
+      "mzc_tm_aiops@megazone.com"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "",
+            "value": ""
+          },
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "Datasource",
+          "options": [],
+          "query": "prometheus",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "PSA Aiops - Su Dashboard - Resource request customize - zum",
+    "uid": "K3fRA5WVk",
+    "version": 15,
+    "weekStart": ""
+  }

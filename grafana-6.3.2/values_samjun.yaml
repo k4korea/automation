@@ -1,0 +1,116 @@
+replicas: 1
+
+image:
+  repository: grafana/grafana-enterprise
+  # Overrides the Grafana image tag whose default is the chart appVersion
+  tag: 8.4.2
+
+testFramework:
+  enabled: false
+
+serviceMonitor:
+  enabled: true
+
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: nginx
+  hosts:
+    - grafana-samjun.aiops-mz.com
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2048Mi
+  requests:
+    cpu: 500m
+    memory: 1000Mi
+
+nodeSelector: {}
+
+affinity: {}
+
+persistence:
+  enabled: true
+  size: 5Gi
+
+adminUser: admin
+adminPassword: qwer1234
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://kube-prometheus-stack-prometheus.monitor.svc.cluster.local:9090
+      access: proxy
+      isDefault: true
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: su
+      type: file
+      disableDeletion: false
+      editable: true
+      allowUiUpdates: true
+      updateIntervalSeconds: 30
+      options:
+        path: /var/lib/grafana/dashboards
+        foldersFromFilesStructure: true
+    - name: loki
+      type: file
+      disableDeletion: false
+      editable: true
+      allowUiUpdates: true
+      updateIntervalSeconds: 30
+      options:
+        path: /var/lib/grafana/dashboards
+        foldersFromFilesStructure: true    
+
+dashboards: 
+  su:    
+    su_overview_01:
+      file: dashboards/su/su_overview_01.json
+    su_cluster_01:
+      file: dashboards/su/su_cluster_01.json
+    su_nodegroup_01:
+      file: dashboards/su/su_nodegroup_01.json
+    su_namespace_01:
+      file: dashboards/su/su_namespace_01.json
+    su_workload_01:
+      file: dashboards/su/su_workload_01.json  
+    su_pod_select_01:
+      file: dashboards/su/su_pod_select_01.json 
+    su_autoscaling_01:
+      file: dashboards/su/su_autoscaling_01.json      
+    su_pod_scheduling_01:
+      file: dashboards/su/su_pod_scheduling_01.json
+    su_resource_request_customize:
+      file: dashboards/su/su_resource_request_customize.json 
+    su_k8s_api_01:
+      file: dashboards/su/su_k8s_api_01.json
+    su_kubelet_kubeproxy_01:
+      file: dashboards/su/su_kubelet_kubeproxy_01.json
+    su_service_nginx_01:
+      file: dashboards/su/su_service_nginx_01.json  
+    su_ecosystem_argocd_01:
+      file: dashboards/su/su_ecosystem_argocd_01.json
+  loki:
+    su_loki_01:
+      file: dashboards/loki/su_loki_01.json  
+    su_pod_select_loki_01:
+      file: dashboards/loki/su_pod_select_loki_01.json
+
+## Sidecars that collect the configmaps with specified label and stores the included files them into the respective folders
+## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
+sidecar:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 100Mi
+    requests:
+      cpu: 50m
+      memory: 50Mi

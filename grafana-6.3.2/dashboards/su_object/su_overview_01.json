@@ -1,0 +1,437 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 12,
+    "iteration": 1663131601014,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${Datasource}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-GrYlRd"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "index": 0,
+                    "text": "Ready"
+                  },
+                  "1": {
+                    "index": 1,
+                    "text": "Ready, Cordon"
+                  }
+                },
+                "type": "value"
+              },
+              {
+                "options": {
+                  "from": 2,
+                  "result": {
+                    "index": 2,
+                    "text": "Not Ready"
+                  },
+                  "to": 9999
+                },
+                "type": "range"
+              }
+            ],
+            "max": 2,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 11,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 13,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "titleSize": 10,
+            "valueSize": 10
+          },
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.4.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${Datasource}"
+            },
+            "exemplar": false,
+            "expr": "kube_node_spec_unschedulable * on (node) group_left(internal_ip) kube_node_info\r\n+ on (node, internal_ip)\r\nsum(kube_node_status_condition{condition=\"Ready\",status!=\"true\"})by(node) * 2 * on (node) group_left(internal_ip) kube_node_info",
+            "format": "time_series",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{internal_ip}}",
+            "refId": "B"
+          }
+        ],
+        "title": "Node Status",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${Datasource}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-GrYlRd"
+            },
+            "mappings": [],
+            "max": 2,
+            "min": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 27,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 17,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {
+            "titleSize": 15,
+            "valueSize": 10
+          },
+          "textMode": "name"
+        },
+        "pluginVersion": "8.4.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${Datasource}"
+            },
+            "exemplar": false,
+            "expr": "(kube_pod_status_phase{phase=\"Running\"}\r\n+ on (pod)\r\nkube_pod_status_phase{phase=\"Pending\"} * 2)\r\n* on (pod) group_left(host_ip) kube_pod_info",
+            "format": "time_series",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{pod}}",
+            "refId": "B"
+          }
+        ],
+        "title": "Pod Status",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${Datasource}"
+        },
+        "description": "ratio",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 1,
+            "min": 0,
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 15,
+          "w": 4,
+          "x": 0,
+          "y": 11
+        },
+        "id": 2,
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true
+        },
+        "pluginVersion": "8.4.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${Datasource}"
+            },
+            "exemplar": false,
+            "expr": "label_replace( instance:node_cpu:ratio, \"node_ip\", \"$1\", \"instance\", \"(.*):.*\" )",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{node_ip}}",
+            "refId": "A"
+          }
+        ],
+        "title": "CPU",
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${Datasource}"
+        },
+        "description": "ratio",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 1,
+            "min": 0,
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 15,
+          "w": 4,
+          "x": 4,
+          "y": 11
+        },
+        "id": 5,
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true
+        },
+        "pluginVersion": "8.4.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${Datasource}"
+            },
+            "exemplar": false,
+            "expr": "label_replace( instance:node_memory_utilisation:ratio, \"node_ip\", \"$1\", \"instance\", \"(.*):.*\" )",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{node_ip}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Memory",
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${Datasource}"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 15,
+          "w": 4,
+          "x": 8,
+          "y": 11
+        },
+        "id": 6,
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true
+        },
+        "pluginVersion": "8.4.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${Datasource}"
+            },
+            "exemplar": false,
+            "expr": "label_replace( instance:node_network_transmit_bytes:rate:sum, \"node_ip\", \"$1\", \"instance\", \"(.*):.*\")",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{node_ip}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Network",
+        "type": "bargauge"
+      }
+    ],
+    "refresh": "1m",
+    "schemaVersion": 35,
+    "style": "dark",
+    "tags": [
+      "Copyrightⓒ. PSA AiOps HS&EV All Rights Reserved",
+      "mzc_tm_aiops@megazone.com"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "",
+            "value": ""
+          },
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "Datasource",
+          "options": [],
+          "query": "prometheus",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-30m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "PSA Aiops - Su Dashboard - Overview # 01",
+    "uid": "jrcP57mVz",
+    "version": 4,
+    "weekStart": ""
+  }
